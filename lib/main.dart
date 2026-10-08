@@ -4,6 +4,7 @@ void main() {
   runApp(const MyApp());
 }
 
+// StatefulWidget digunakan untuk mengelola perubahan data dan tampilan aplikasi
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -61,6 +62,7 @@ class _MyAppState extends State<MyApp> {
 
   String paymentMethod = 'QRIS';
 
+  // TextEditingController digunakan untuk mengelola input teks pengguna
   final TextEditingController noteController = TextEditingController();
   final TextEditingController tableController = TextEditingController();
 
@@ -115,6 +117,7 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
+  // Fungsi ini digunakan untuk mengatur format harga menjadi Rupiah
   String formatPrice(int price) {
     int thousands = price ~/ 1000;
     int remainder = price % 1000;
@@ -126,6 +129,7 @@ class _MyAppState extends State<MyApp> {
     return 'Rp $thousands.$remainder';
   }
 
+  // Fungsi ini digunakan untuk mengambil jumlah produk tertentu
   int getQuantity(int index) {
     if (index == 0) {
       return quantity1;
@@ -158,6 +162,7 @@ class _MyAppState extends State<MyApp> {
     return quantity8;
   }
 
+  // Fungsi ini digunakan untuk mengambil catatan produk tertentu
   String getNote(int index) {
     if (index == 0) {
       return note1;
@@ -190,6 +195,7 @@ class _MyAppState extends State<MyApp> {
     return note8;
   }
 
+  // Fungsi ini digunakan untuk menghitung harga produk dan tambahannya
   int getProductPrice(int index) {
     int price = foodPrices[index];
 
@@ -224,6 +230,7 @@ class _MyAppState extends State<MyApp> {
     return price;
   }
 
+  // Fungsi ini digunakan untuk menghitung subtotal semua produk
   int getSubtotal() {
     int total = 0;
 
@@ -262,6 +269,7 @@ class _MyAppState extends State<MyApp> {
     return total;
   }
 
+  // Fungsi ini digunakan untuk menentukan biaya layanan pesanan
   int getServiceFee() {
     if (getTotalProduct() > 0) {
       return 3000;
@@ -270,10 +278,12 @@ class _MyAppState extends State<MyApp> {
     return 0;
   }
 
+  // Fungsi ini digunakan untuk menghitung total harga pembayaran
   int getTotalPrice() {
     return getSubtotal() + getServiceFee();
   }
 
+  // Fungsi ini digunakan untuk menghitung total jumlah produk
   int getTotalProduct() {
     int total = 0;
 
@@ -312,6 +322,7 @@ class _MyAppState extends State<MyApp> {
     return total;
   }
 
+  // setState digunakan untuk memperbarui tampilan setelah data berubah
   void openDetail(int index) {
     setState(() {
       selectedFood = index;
@@ -358,6 +369,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  // setState digunakan untuk memperbarui data produk saat diedit
   void editProduct(int index) {
     setState(() {
       selectedFood = index;
@@ -404,6 +416,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  // Fungsi ini digunakan untuk menyimpan produk ke keranjang
   void saveProduct() {
     setState(() {
       note = noteController.text;
@@ -490,6 +503,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  // Fungsi ini digunakan untuk menghapus produk dari keranjang
   void removeProduct(int index) {
     setState(() {
       if (index == 0) {
@@ -534,6 +548,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  // Fungsi ini digunakan untuk memvalidasi nomor meja sebelum pembayaran
   void startPayment() {
     if (tableController.text == '') {
       setState(() {
@@ -548,6 +563,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  // Fungsi ini digunakan untuk menampilkan halaman pembayaran berhasil
   void finishPayment() {
     setState(() {
       showPayment = false;
@@ -555,6 +571,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  // Fungsi ini digunakan untuk menyelesaikan pembayaran di kasir
   void finishCashOrder() {
     setState(() {
       showPayment = false;
@@ -562,6 +579,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  // Fungsi ini digunakan untuk mengosongkan pesanan setelah selesai
   void finishOrder() {
     setState(() {
       showPaymentSuccess = false;
@@ -622,6 +640,8 @@ class _MyAppState extends State<MyApp> {
                       ? buildDetail()
                       : buildPage(),
         ),
+
+        // BottomNavigationBar digunakan untuk berpindah antar halaman utama
         bottomNavigationBar:
             showDetail || showPayment || showPaymentSuccess
                 ? null
@@ -669,6 +689,8 @@ class _MyAppState extends State<MyApp> {
                               const Spacer(),
                               MouseRegion(
                                 cursor: SystemMouseCursors.click,
+
+                                // ElevatedButton digunakan untuk menjalankan aksi pengguna
                                 child: ElevatedButton(
                                   onPressed: () {
                                     setState(() {
@@ -688,14 +710,16 @@ class _MyAppState extends State<MyApp> {
                       BottomNavigationBar(
                         type: BottomNavigationBarType.fixed,
                         currentIndex: selectedMenu,
-                        selectedItemColor: Colors.red,
-                        unselectedItemColor: Colors.grey,
+
+                        // setState digunakan untuk mengganti halaman navigasi
                         onTap: (index) {
                           setState(() {
                             selectedMenu = index;
                             showTableError = false;
                           });
                         },
+                        selectedItemColor: Colors.red,
+                        unselectedItemColor: Colors.grey,
                         items: const [
                           BottomNavigationBarItem(
                             icon: Icon(Icons.home),
@@ -717,6 +741,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  // Fungsi ini digunakan untuk menentukan halaman yang ditampilkan
   Widget buildPage() {
     if (selectedMenu == 0) {
       return buildHome();
@@ -730,9 +755,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget buildHome() {
+    // MediaQuery digunakan untuk menyesuaikan tampilan berdasarkan ukuran layar
     double screenWidth = MediaQuery.of(context).size.width;
     bool isDesktop = screenWidth >= 700;
 
+    // SingleChildScrollView digunakan agar konten dapat digulir pada layar
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(isDesktop ? 30 : 20),
@@ -785,6 +812,8 @@ class _MyAppState extends State<MyApp> {
                   const SizedBox(height: 15),
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
+
+                    // ElevatedButton digunakan untuk menjalankan aksi pengguna
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -820,9 +849,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget buildMenu() {
+    // MediaQuery digunakan untuk menyesuaikan tampilan berdasarkan ukuran layar
     double screenWidth = MediaQuery.of(context).size.width;
     bool isDesktop = screenWidth >= 700;
 
+    // SingleChildScrollView digunakan agar daftar menu dapat digulir
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(isDesktop ? 30 : 20),
@@ -859,6 +890,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget buildFoodCard(int index) {
+    // MediaQuery digunakan untuk menyesuaikan ukuran kartu makanan
     double screenWidth = MediaQuery.of(context).size.width;
     bool isDesktop = screenWidth >= 700;
 
@@ -885,6 +917,8 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           const SizedBox(width: 15),
+
+          // Expanded digunakan agar konten menyesuaikan ruang tersedia
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -917,6 +951,8 @@ class _MyAppState extends State<MyApp> {
                 const SizedBox(height: 8),
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
+
+                  // GestureDetector digunakan untuk menangani interaksi klik pengguna
                   child: GestureDetector(
                     onTap: () {
                       openDetail(index);
@@ -968,6 +1004,7 @@ class _MyAppState extends State<MyApp> {
 
     int currentQuantity = getQuantity(selectedFood);
 
+    // SingleChildScrollView digunakan agar detail produk dapat digulir
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -985,6 +1022,8 @@ class _MyAppState extends State<MyApp> {
               children: [
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
+
+                  // GestureDetector digunakan untuk kembali ke halaman sebelumnya
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
@@ -1051,6 +1090,8 @@ class _MyAppState extends State<MyApp> {
                       const SizedBox(height: 20),
                       MouseRegion(
                         cursor: SystemMouseCursors.click,
+
+                        // GestureDetector digunakan untuk memilih tambahan keju
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -1105,6 +1146,8 @@ class _MyAppState extends State<MyApp> {
                   children: [
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
+
+                      // GestureDetector digunakan untuk mengurangi jumlah produk
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
@@ -1167,6 +1210,8 @@ class _MyAppState extends State<MyApp> {
                     const SizedBox(width: 20),
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
+
+                      // GestureDetector digunakan untuk menambah jumlah produk
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
@@ -1221,6 +1266,8 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ),
                 const SizedBox(height: 10),
+
+                // TextField digunakan untuk menerima catatan dari pengguna
                 TextField(
                   controller: noteController,
                   maxLines: 3,
@@ -1237,6 +1284,8 @@ class _MyAppState extends State<MyApp> {
                   child: SizedBox(
                     width: double.infinity,
                     height: 52,
+
+                    // ElevatedButton digunakan untuk menyimpan pesanan
                     child: ElevatedButton(
                       onPressed: saveProduct,
                       style: ElevatedButton.styleFrom(
@@ -1269,6 +1318,8 @@ class _MyAppState extends State<MyApp> {
     return Expanded(
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
+
+        // GestureDetector digunakan untuk memilih ukuran pizza
         child: GestureDetector(
           onTap: () {
             setState(() {
@@ -1314,8 +1365,10 @@ class _MyAppState extends State<MyApp> {
         !checkout7 &&
         !checkout8;
 
+    // Stack digunakan untuk menampilkan notifikasi di atas halaman
     return Stack(
       children: [
+        // SingleChildScrollView digunakan agar halaman keranjang dapat digulir
         SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -1368,6 +1421,8 @@ class _MyAppState extends State<MyApp> {
                     ),
                   ),
                   const SizedBox(height: 10),
+
+                  // TextField digunakan untuk menerima nomor meja pengguna
                   TextField(
                     controller: tableController,
                     keyboardType: TextInputType.number,
@@ -1497,6 +1552,8 @@ class _MyAppState extends State<MyApp> {
                     child: SizedBox(
                       width: double.infinity,
                       height: 52,
+
+                      // ElevatedButton digunakan untuk membuat pesanan
                       child: ElevatedButton(
                         onPressed: startPayment,
                         style: ElevatedButton.styleFrom(
@@ -1562,6 +1619,7 @@ class _MyAppState extends State<MyApp> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Expanded digunakan agar informasi produk memenuhi ruang tersedia
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1639,6 +1697,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               const SizedBox(width: 12),
+              // Expanded digunakan agar informasi produk tidak memenuhi layar
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1671,6 +1730,8 @@ class _MyAppState extends State<MyApp> {
               ),
               MouseRegion(
                 cursor: SystemMouseCursors.click,
+
+                // GestureDetector digunakan untuk membuka fitur edit produk
                 child: GestureDetector(
                   onTap: () {
                     editProduct(index);
@@ -1719,6 +1780,8 @@ class _MyAppState extends State<MyApp> {
             children: [
               MouseRegion(
                 cursor: SystemMouseCursors.click,
+
+                // GestureDetector digunakan untuk mengurangi jumlah produk
                 child: GestureDetector(
                   onTap: () {
                     if (quantity == 1) {
@@ -1775,6 +1838,8 @@ class _MyAppState extends State<MyApp> {
               const SizedBox(width: 10),
               MouseRegion(
                 cursor: SystemMouseCursors.click,
+
+                // GestureDetector digunakan untuk menambah jumlah produk
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -1837,6 +1902,8 @@ class _MyAppState extends State<MyApp> {
     return Expanded(
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
+
+        // GestureDetector digunakan untuk memilih metode pembayaran
         child: GestureDetector(
           onTap: () {
             setState(() {
@@ -1871,6 +1938,7 @@ class _MyAppState extends State<MyApp> {
     int totalPrice = getTotalPrice();
 
     if (paymentMethod == 'QRIS') {
+      // SingleChildScrollView digunakan agar halaman pembayaran dapat digulir
       return SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -1879,6 +1947,8 @@ class _MyAppState extends State<MyApp> {
             children: [
               MouseRegion(
                 cursor: SystemMouseCursors.click,
+
+                // GestureDetector digunakan untuk kembali ke keranjang
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -1973,6 +2043,8 @@ class _MyAppState extends State<MyApp> {
                 child: SizedBox(
                   width: double.infinity,
                   height: 52,
+
+                  // ElevatedButton digunakan untuk mengonfirmasi pembayaran
                   child: ElevatedButton(
                     onPressed: finishPayment,
                     style: ElevatedButton.styleFrom(
@@ -2003,6 +2075,8 @@ class _MyAppState extends State<MyApp> {
           children: [
             MouseRegion(
               cursor: SystemMouseCursors.click,
+
+              // GestureDetector digunakan untuk kembali ke keranjang
               child: GestureDetector(
                 onTap: () {
                   setState(() {
@@ -2085,6 +2159,8 @@ class _MyAppState extends State<MyApp> {
               child: SizedBox(
                 width: double.infinity,
                 height: 52,
+
+                // ElevatedButton digunakan untuk menyelesaikan pesanan
                 child: ElevatedButton(
                   onPressed: finishCashOrder,
                   style: ElevatedButton.styleFrom(
@@ -2151,6 +2227,8 @@ class _MyAppState extends State<MyApp> {
               child: SizedBox(
                 width: double.infinity,
                 height: 52,
+
+                // ElevatedButton digunakan untuk kembali ke halaman utama
                 child: ElevatedButton(
                   onPressed: finishOrder,
                   style: ElevatedButton.styleFrom(
